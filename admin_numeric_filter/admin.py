@@ -39,10 +39,6 @@ class SingleNumericFilter(admin.FieldListFilter):
             value = params.pop(self.parameter_name)
             self.used_parameters[self.parameter_name] = value
 
-    def queryset(self, request, queryset):
-        if self.value():
-            return queryset.filter(**{self.parameter_name: self.value()})
-
     def value(self):
         return self.used_parameters.get(self.parameter_name, None)
 
@@ -73,11 +69,11 @@ class RangeNumericFilter(admin.FieldListFilter):
 
         if self.parameter_name + '_from' in params:
             value = params.pop(self.field_path + '_from')
-            self.used_parameters[self.field_path + '_from'] = value
+            self.used_parameters[self.field_path + '_from'] = value[-1]
 
         if self.parameter_name + '_to' in params:
             value = params.pop(self.field_path + '_to')
-            self.used_parameters[self.field_path + '_to'] = value
+            self.used_parameters[self.field_path + '_to'] = value[-1]
 
     def queryset(self, request, queryset):
         filters = {}
